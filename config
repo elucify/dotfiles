@@ -1,0 +1,31 @@
+Host ncbi
+   User mjohnson
+   HostName ssh.ncbi.nlm.nih.gov
+   ForwardX11 yes
+   ForwardX11Trusted yes
+   SmartcardDevice /usr/lib/x86_64-linux-gnu/opensc-pkcs11.so
+   Compression yes
+   LocalForward 3128 webproxy-vip.ncbi.nlm.nih.gov:3128
+   LocalForward 3389 mslogin01:3389
+   LocalForward 127.0.0.2:5920 ncbimac1035:5920
+
+Host ncbiproxy
+   User mjohnson
+   HostName ssh.ncbi.nlm.nih.gov
+   GatewayPorts yes
+   ForwardX11 yes
+   ForwardX11Trusted yes
+   SmartcardDevice /usr/lib/x86_64-linux-gnu/opensc-pkcs11.so
+   Compression yes
+   LocalForward 3128 calamari:3128
+   LocalForward 3389 mslogin01:3389
+#   LocalForward 127.0.0.2:5920 ncbimac1035:5920
+   LocalForward 0.0.0.0:5920 ncbimac1056:5920
+   LocalForward 0.0.0.0:3128 calamari:3128
+
+Host koding
+     User elucify
+     HostName uekkfd41a6c4.elucify.koding.io
+     ForwardX11 yes
+     ForwardX11Trusted yes
+     IdentityFile ~/.ssh/id_kid

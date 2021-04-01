@@ -1,0 +1,55 @@
+# From: https://ncbi.slack.com/archives/CV3GMNV0U/p1599006608049300?thread_ts=1599004086.048400&cid=CV3GMNV0U
+
+Host ncbi vhod-test vhod ssh.ncbi.nlm.nih.gov ssh ssh.be-md.ncbi.nlm.nih.gov 
+  Hostname ssh.be-md.ncbi.nlm.nih.gov
+  #PKCS11Provider /usr/lib/opensc-pkcs11.so
+  PKCS11Provider /usr/lib/x86_64-linux-gnu/opensc-pkcs11.so
+  DynamicForward 1080
+
+Host ssh.st-va ssh.st-va.ncbi.nlm.nih.gov
+  Hostname ssh.st-va.ncbi.nlm.nih.gov
+  #PKCS11Provider /usr/lib/opensc-pkcs11.so
+  PKCS11Provider /usr/lib/x86_64-linux-gnu/opensc-pkcs11.so
+
+Host ssh-tablet ssh-tablet.be-md ssh-tablet.be-md.ncbi.nlm.nih.gov
+  Hostname ssh-tablet.be-md.ncbi.nlm.nih.gov
+  Match host *.ncbi.nlm.nih.gov
+  User mjohnson
+  LocalForward 3128 webproxy:3128
+  LocalForward 3129 webproxy.st-va:3128
+  LocalForward 3130 calamari652.gc-va:3128
+  LocalForward 3389 mslogin01:3389
+  LocalForward 3390 ncbipc0181:3389
+  LocalForward 3392 mslogin03:3389
+  LocalForward 3393 mslogin04:3389
+  LocalForward 5223 jabber:5223
+  LocalForward 5920 ncbimac1035:5920
+
+Host ace* irbdev* iebdev* cbbdev* nagios* mtatest* *.be-md.ncbi.nlm.nih.gov !ssh.be-md.ncbi.nlm.nih.gov ncbimac*
+  ProxyJump mjohnson@ncbi
+  User mjohnson
+  LocalForward 3128 webproxy:3128
+  LocalForward 3129 webproxy.st-va:3128
+  LocalForward 3130 calamari652.gc-va:3128
+  LocalForward 3389 mslogin01:3389
+  LocalForward 3390 ncbipc0181:3389
+  LocalForward 3392 mslogin03:3389
+  LocalForward 3393 mslogin04:3389
+  LocalForward 5223 jabber:5223
+  LocalForward 5920 ncbimac1035:5920
+
+Host bastion6*
+  ProxyJump mjohnson@iebdev12
+  LocalForward 3130 calamari652.gc-va:3128
+  User mjohnson
+# defaults.  All stanzas are checked, first attribute match wins.  So 
+# defaults go at the end.
+
+Host *
+  ForwardX11 yes
+  ForwardX11Trusted yes
+  ForwardAgent yes
+  ControlPath /home/%u/.ssh/control_%r@%h:%p
+  ControlPersist yes
+  ControlMaster auto
+  IdentityFile ~/.ssh/id_kid

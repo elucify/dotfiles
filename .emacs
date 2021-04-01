@@ -2,6 +2,12 @@
 ;; GLOBAL SETKEYs
 ;; Use control-h for backspace (on ibm3151, "CONTROL-8" is a
 ;; little annoying.)  This means redefining HELP key from ^H to ^X^H.
+;; Query before killing (catches accidental \C-xc)
+(defun Query-kill () "Query, kill if true."
+(interactive)
+(cond ((y-or-n-p "Are you sure you want to exit emacs?")
+       (save-buffers-kill-emacs))))
+
 (define-key global-map "\C-x?"	'help-command)
 
 (setq-default indent-tabs-mode nil)	; use spaces for tabs always.
@@ -60,7 +66,7 @@
 (global-set-key [M-right]	'indent-a-line)
 
 ;; X Colors
-(defun set-x-colors () "Configure colors for X font lock mode" (set-face-background 'modeline "SlateBlue") (set-face-foreground 'modeline "green") (set-face-foreground 'bold-italic "red") (set-face-foreground 'italic "blue") (set-face-background 'italic "white") (set-face-background 'region "yellow") (set-face-foreground 'underline "firebrick")
+(defun set-x-colors () "Configure colors for X font lock mode" (set-face-foreground 'bold-italic "red") (set-face-foreground 'italic "blue") (set-face-background 'italic "white") (set-face-background 'region "yellow") (set-face-foreground 'underline "firebrick")
 )
 
 ;; Set X colors if DISPLAY is set.
@@ -80,7 +86,6 @@
 
 ;; Undisable advanced options
 (put 'eval-expression 'disabled nil)
-(put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
 
 ;; python OK this sucks
@@ -94,7 +99,7 @@
 ;; End python
 
 ;; python something simpler...
-(add-to-list 'load-path "~/.emacs.d")
+;; (add-to-list 'load-path "~/.emacs.d")
 (require 'python)
 
 (add-hook 'python-mode-hook
@@ -219,12 +224,6 @@
 ;;(interactive)
 ;;(shell-command "rlog -L -R RCS/*"))
 
-
-;; Query before killing (catches accidental \C-xc)
-(defun Query-kill () "Query, kill if true."
-(interactive)
-(cond ((y-or-n-p "Are you sure you want to exit emacs?")
-       (save-buffers-kill-emacs))))
 
 ;; Set font-lock-mode only if DISPLAY is set in env
 (defun x-font-lock-mode () 
@@ -556,3 +555,4 @@
 (display-time)
 
 (message "GNU Emacs ready...")
+(put 'narrow-to-region 'disabled nil)
